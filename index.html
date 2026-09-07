@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Play 2048 Online Free – No Download, Unblocked Puzzle Game</title>
+<meta name="description" content="Play 2048 online for free. Slide tiles, merge numbers, and reach the 2048 tile. No download, no sign-up, works on desktop and mobile. Unblocked at school and work.">
+<meta property="og:title" content="Play 2048 Online Free">
+<meta property="og:description" content="Slide tiles, merge numbers, reach 2048. Free, no download, unblocked.">
+<meta property="og:type" content="website">
+<!-- 【AdSense 位置】审核通过后，把 Google 给你的广告代码粘贴在这里 -->
+<!-- 【Google Analytics 位置】拿到 GA 测量 ID 后，把 gtag.js 代码粘贴在这里 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "2048",
+  "description": "Free online 2048 puzzle game. Merge numbered tiles to reach 2048.",
+  "genre": "Puzzle",
+  "gamePlatform": "Web Browser",
+  "applicationCategory": "Game",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "Is 2048 free to play online?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. 2048 is completely free in your browser. No download, no account, no paywall."}},
+    {"@type": "Question", "name": "Can I play 2048 unblocked at school or work?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The game runs entirely in the browser with no installs, so it works on most restricted networks."}},
+    {"@type": "Question", "name": "What is the best strategy to win 2048?", "acceptedAnswer": {"@type": "Answer", "text": "Keep your largest tile locked in one corner, build a descending chain next to it, and avoid moving in the direction that frees the corner tile."}}
+  ]
+}
+</script>
+<style>
+:root{
+  --bg:#0f1420; --panel:#1a2233; --panel2:#222c42; --text:#e8ecf5; --muted:#9aa7c0;
+  --accent:#f2b53b; --accent2:#7c5cff; --grid:#131a29;
+  --cell-empty:#243050; --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:"Segoe UI",system-ui,-apple-system,sans-serif;line-height:1.65}
+a{color:var(--accent)}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header.top{border-bottom:1px solid #263252;background:rgba(15,20,32,.9);position:sticky;top:0;z-index:10;backdrop-filter:blur(8px)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-weight:800;font-size:20px;letter-spacing:.5px}
+.logo span{color:var(--accent)}
+nav a{color:var(--muted);text-decoration:none;margin-left:22px;font-size:15px}
+nav a:hover{color:var(--text)}
+.hero{text-align:center;padding:44px 0 10px}
+.hero h1{font-size:clamp(28px,5vw,44px);font-weight:800}
+.hero h1 em{color:var(--accent);font-style:normal}
+.hero p{color:var(--muted);max-width:640px;margin:12px auto 0}
+.badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.badge{background:var(--panel);border:1px solid #2c3a5c;color:var(--muted);font-size:13px;padding:5px 14px;border-radius:999px}
+.game-shell{background:var(--panel);border:1px solid #2c3a5c;border-radius:var(--radius);padding:24px;margin:34px auto;max-width:520px}
+.scorebar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.score{background:var(--grid);border-radius:10px;padding:8px 18px;text-align:center;min-width:96px}
+.score small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px}
+.score b{font-size:22px;color:var(--accent)}
+button.new{background:var(--accent);color:#1b1405;border:none;font-weight:700;font-size:15px;padding:12px 20px;border-radius:10px;cursor:pointer}
+button.new:hover{filter:brightness(1.1)}
+#board{position:relative;width:100%;aspect-ratio:1;background:var(--grid);border-radius:12px;touch-action:none;user-select:none}
+.tile{position:absolute;display:flex;align-items:center;justify-content:center;font-weight:800;border-radius:8px;transition:transform .1s ease;font-size:clamp(20px,6vw,34px);background:var(--cell-empty);color:var(--text)}
+.msg{margin-top:14px;min-height:24px;text-align:center;color:var(--muted)}
+.msg.win{color:var(--accent)}
+.hint{text-align:center;color:var(--muted);font-size:13px;margin-top:4px}
+section.block{padding:34px 0;border-top:1px solid #223052}
+section.block h2{font-size:26px;margin-bottom:14px}
+section.block h2 em{color:var(--accent2);font-style:normal}
+section.block p{color:#c6cfe2;margin-bottom:12px}
+section.block ul,section.block ol{color:#c6cfe2;padding-left:22px;margin-bottom:12px}
+section.block li{margin-bottom:6px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:16px}
+.step{background:var(--panel2);border-radius:12px;padding:18px}
+.step b{color:var(--accent);display:block;margin-bottom:6px}
+details{background:var(--panel);border:1px solid #2c3a5c;border-radius:10px;padding:14px 18px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600}
+details p{margin-top:8px;color:#c6cfe2}
+footer{border-top:1px solid #223052;color:var(--muted);font-size:13px;padding:26px 0;margin-top:20px;text-align:center}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="logo">▦ Play<span>2048</span></div>
+    <nav>
+      <a href="#play">Play</a>
+      <a href="#howto">How to Play</a>
+      <a href="#tips">Tips</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <h1>Play <em>2048</em> Online — Free &amp; Unblocked</h1>
+    <p>Slide the tiles, merge the numbers, and chase the legendary 2048 tile. No download, no sign-up — just pure puzzle fun in your browser.</p>
+    <div class="badges">
+      <span class="badge">✔ 100% Free</span>
+      <span class="badge">✔ No Download</span>
+      <span class="badge">✔ Mobile Friendly</span>
+      <span class="badge">✔ Unblocked</span>
+    </div>
+  </div>
+
+  <!-- ============ GAME AREA ============ -->
+  <div class="game-shell" id="play">
+    <div class="scorebar">
+      <div class="score"><small>Score</small><b id="score">0</b></div>
+      <button class="new" id="newgame">New Game</button>
+      <div class="score"><small>Best</small><b id="best">0</b></div>
+    </div>
+    <div id="board"></div>
+    <div class="msg" id="msg"></div>
+    <p class="hint">⌨️ Arrow keys on desktop · 👆 Swipe on mobile</p>
+  </div>
+  <!-- 真实项目里，上面这块区域会换成 GameMonetize 的 iframe 嵌入代码 -->
+
+  <!-- ============ SEO CONTENT ============ -->
+  <section class="block">
+    <h2>What is <em>2048</em>?</h2>
+    <p>2048 is a single-player sliding tile puzzle game that took the internet by storm. The game is played on a simple 4×4 grid. Every move you make slides all the tiles in one direction, and when two tiles with the same number collide, they merge into one tile showing their sum. After each move, a new tile — either a 2 or a 4 — appears in a random empty cell. Your goal is to keep merging tiles until you create the elusive <strong>2048</strong> tile.</p>
+    <p>The rules take ten seconds to learn, but the strategy takes hours to master. Because a new tile spawns after every swipe, the board constantly fills up, and one careless move can trap your high-value tiles behind a wall of small numbers. The game ends when the grid is full and no merges remain — so every swipe matters.</p>
+    <p>Originally created by Gabriele Cirulli in 2014 as an open-source project, 2048 became one of the most viral browser games ever made, played by hundreds of millions of people worldwide. Its clean math, quick rounds, and "just one more try" feeling make it perfect for a short break at school, at work, or on your phone. This version runs entirely in your browser: there is nothing to install, no account to create, and it works on any modern device.</p>
+  </section>
+
+  <section class="block" id="howto">
+    <h2>How to Play</h2>
+    <div class="steps">
+      <div class="step"><b>1 · Slide</b>Use arrow keys (or swipe on mobile) to move every tile in one direction.</div>
+      <div class="step"><b>2 · Merge</b>When two tiles with the same number touch, they combine into their sum: 2+2=4, 4+4=8, and so on.</div>
+      <div class="step"><b>3 · Survive</b>A new 2 or 4 tile spawns after every move. Don't let the grid fill up.</div>
+      <div class="step"><b>4 · Win</b>Create the 2048 tile to win — then keep going for a high score if you dare.</div>
+    </div>
+  </section>
+
+  <section class="block" id="tips">
+    <h2>Tips &amp; Strategy</h2>
+    <ul>
+      <li><strong>Pick a corner and defend it.</strong> Keep your biggest tile locked in one corner and never let it leave.</li>
+      <li><strong>Build a snake.</strong> Arrange your tiles in descending order along an edge, like 256 → 128 → 64 → 32.</li>
+      <li><strong>Use only three directions.</strong> If your corner is bottom-left, avoid pressing "up" — it frees your anchor tile.</li>
+      <li><strong>Don't chase small merges.</strong> Think two moves ahead; merging small tiles at the wrong time breaks your chain.</li>
+      <li><strong>Stay calm when the board fills.</strong> Look for the move that opens the most space, not the biggest merge.</li>
+    </ul>
+  </section>
+
+  <section class="block" id="faq">
+    <h2>Frequently Asked Questions</h2>
+    <details><summary>Is 2048 free to play online?</summary><p>Yes. 2048 is completely free in your browser. No download, no account, no paywall.</p></details>
+    <details><summary>Can I play 2048 unblocked at school or work?</summary><p>Yes. The game runs entirely in your browser with no installs, so it works on most restricted networks.</p></details>
+    <details><summary>Does 2048 work on my phone?</summary><p>Yes — swipe controls are built in, and the board automatically resizes to fit your screen.</p></details>
+    <details><summary>What is the best strategy to win 2048?</summary><p>Keep your largest tile locked in one corner, build a descending chain next to it, and avoid moving in the direction that frees the corner tile.</p></details>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 Play2048 · Free online puzzle game · <a href="#">Privacy Policy</a> · <a href="#">About</a></p>
+    <!-- 真实项目里，Privacy Policy 和 About 页面是 AdSense 审核的必需品，务必补上 -->
+  </div>
+</footer>
+
+<script>
+const SIZE = 4;
+let grid, score = 0, best = +(localStorage.getItem('p2048best') || 0);
+const board = document.getElementById('board');
+const scoreEl = document.getElementById('score');
+const bestEl = document.getElementById('best');
+const msgEl = document.getElementById('msg');
+bestEl.textContent = best;
+
+function newGame(){
+  grid = Array.from({length:SIZE},()=>Array(SIZE).fill(0));
+  score = 0; msgEl.textContent=''; msgEl.className='msg';
+  spawn(); spawn(); render();
+}
+function spawn(){
+  const empty=[];
+  for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++)if(!grid[r][c])empty.push([r,c]);
+  if(!empty.length)return;
+  const [r,c]=empty[Math.floor(Math.random()*empty.length)];
+  grid[r][c]=Math.random()<0.9?2:4;
+}
+function render(){
+  board.innerHTML='';
+  const gap=2.2; // percent
+  const cell=(100-gap*(SIZE+1))/SIZE;
+  for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++){
+    const v=grid[r][c];
+    const t=document.createElement('div');
+    t.className='tile';
+    t.style.width=cell+'%'; t.style.height=cell+'%';
+    t.style.left=(gap+c*(cell+gap))+'%';
+    t.style.top=(gap+r*(cell+gap))+'%';
+    if(v){
+      t.textContent=v;
+      const colors={2:'#3c4a6b',4:'#4a5b84',8:'#f2b53b',16:'#f29c3b',32:'#f2763b',64:'#f2503b',128:'#edd65a',256:'#edc94a',512:'#edbb3a',1024:'#edae2a',2048:'#7c5cff'};
+      t.style.background=colors[v]||'#9d5cff';
+      if(v<=4)t.style.color='#e8ecf5';
+      if(v>=8&&v<=64)t.style.color='#1b1405';
+      if(v>=1024)t.style.fontSize='clamp(14px,4.5vw,26px)';
+    }
+    board.appendChild(t);
+  }
+  scoreEl.textContent=score;
+  if(score>best){best=score;bestEl.textContent=best;localStorage.setItem('p2048best',best);}
+}
+function slide(row){
+  let arr=row.filter(v=>v);
+  for(let i=0;i<arr.length-1;i++){
+    if(arr[i]===arr[i+1]){arr[i]*=2;score+=arr[i];arr.splice(i+1,1);}
+  }
+  while(arr.length<SIZE)arr.push(0);
+  return arr;
+}
+function move(dir){
+  const before=JSON.stringify(grid);
+  for(let i=0;i<SIZE;i++){
+    let line=[];
+    for(let j=0;j<SIZE;j++){
+      if(dir==='left')line.push(grid[i][j]);
+      if(dir==='right')line.push(grid[i][SIZE-1-j]);
+      if(dir==='up')line.push(grid[j][i]);
+      if(dir==='down')line.push(grid[SIZE-1-j][i]);
+    }
+    line=slide(line);
+    for(let j=0;j<SIZE;j++){
+      if(dir==='left')grid[i][j]=line[j];
+      if(dir==='right')grid[i][SIZE-1-j]=line[j];
+      if(dir==='up')grid[j][i]=line[j];
+      if(dir==='down')grid[SIZE-1-j][i]=line[j];
+    }
+  }
+  if(JSON.stringify(grid)!==before){
+    spawn();render();check();
+  }
+}
+function check(){
+  for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++){
+    if(grid[r][c]===2048&&!msgEl.textContent){msgEl.textContent='🎉 You reached 2048! Keep going?';msgEl.className='msg win';}
+  }
+  const moves=['left','right','up','down'];
+  const copy=grid.map(r=>[...r]);
+  let can=false;
+  for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++){
+    if(!grid[r][c])can=true;
+    if(c<SIZE-1&&grid[r][c]===grid[r][c+1])can=true;
+    if(r<SIZE-1&&grid[r][c]===grid[r+1][c])can=true;
+  }
+  if(!can){msgEl.textContent='Game Over — press New Game to retry';grid=copy;}
+}
+document.addEventListener('keydown',e=>{
+  const map={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down'};
+  if(map[e.key]){e.preventDefault();move(map[e.key]);}
+});
+let tx,ty;
+board.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+board.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)<24&&Math.abs(dy)<24)return;
+  if(Math.abs(dx)>Math.abs(dy))move(dx>0?'right':'left');else move(dy>0?'down':'up');
+},{passive:true});
+document.getElementById('newgame').addEventListener('click',newGame);
+newGame();
+</script>
+</body>
+</html>
